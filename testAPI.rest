@@ -1,0 +1,12 @@
+GET http://localhost:3000/api/specialities
+
+
+###
+POST http://localhost:3000/api/specialities
+Content-Type: application/json
+
+{
+  "name": "urologie",
+  "description": "L'urologie est la spécialité médico-chirurgicale qui traite les maladies des voies urinaires (reins, uretères, vessie, urètre) chez l'homme et la femme, ainsi que l'appareil reproducteur masculin (prostate, pénis, testicules).",
+  "createdBy":"696ddc5b2e534f9d38ccc2dd"
+}
