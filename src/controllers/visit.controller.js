@@ -86,28 +86,36 @@ const getAllVisits = async (req, res) => {
   try {
     const { status, startDate, endDate } = req.query;
 
-    // Filtrer par médecin et sa spécialité si c'est un médecin connecté
     let filter = {};
-    if (req.user.role === 'medecin') {
-      filter.doctor = req.user._id;        // uniquement ses visites
-      filter.speciality = req.user.speciality; // et sa spécialité
+
+    const currentRole = req.headers['x-current-role'] || req.user.role[0];
+
+    // Filtres additionnels
+    if (status) filter.status = status;
+    if (startDate || endDate) {
+      filter.visitDate = {};
+      if (startDate) filter.visitDate.$gte = new Date(startDate);
+      if (endDate) filter.visitDate.$lte = new Date(endDate);
     }
 
-    if (status) filter.status = status;
-    if (startDate || endDate) filter.visitDate = {};
-    if (startDate) filter.visitDate.$gte = new Date(startDate);
-    if (endDate) filter.visitDate.$lte = new Date(endDate);
 
     const visits = await Visit.find(filter)
-      .populate('patient', 'fullname dateOfBirth')
+      .populate('patient', 'fullname patientNumber dateOfBirth phone')
       .populate('speciality', 'name')
       .populate('doctor', 'fullname')
-      .populate('payment');
+      .populate('payment')
+      .sort({ visitDate: -1 });
 
-    res.status(200).json({ message: "Liste des visites", visits });
+
+    res.status(200).json({ 
+      message: "Liste des visites", 
+      data: visits
+    });
   } catch (error) {
-    console.error("Erreur récupération visites:", error);
-    res.status(500).json({ message: "Erreur serveur", error: error.message });
+    res.status(500).json({ 
+      message: "Erreur serveur", 
+      error: error.message 
+    });
   }
 };
 

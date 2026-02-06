@@ -27,7 +27,7 @@ const scheduleOperation = async (req, res) => {
     }
     
     // Générer le numéro d'opération
-    const operationNumber = generateNumeroOperation()
+    const operationNumber = await generateNumeroOperation()
     
     // Créer l'opération
     const operation = await Operation.create({

@@ -121,4 +121,70 @@ const updateMyProfile = async (req, res) => {
   }
 };
 
-module.exports = { getAllUsers,createUser,getMyProfile,toggleUserStatus,updateMyProfile };
+const updateUserRole = async (req, res) => {
+  try {
+    const { role, speciality } = req.body;
+
+    // Vérifier existence user
+    const user = await User.findById(req.params.id);
+    if (!user) {
+      return res.status(404).json({
+        message: "Utilisateur non trouvé"
+      });
+    }
+
+    // Update rôle
+    if (role) {
+      user.role = role;
+    }
+
+    // Si médecin  spécialité obligatoire
+    if (role && role.includes("medecin")) {
+      if (!speciality || speciality.length === 0) {
+        return res.status(400).json({
+          message: "Un médecin doit avoir au moins une spécialité"
+        });
+      }
+      user.speciality = speciality;
+    } else {
+      // Si plus médecin
+      user.speciality = [];
+    }
+
+    await user.save();
+
+    res.status(200).json({
+      message: "Rôle mis à jour avec succès",
+      user
+    });
+
+  } catch (error) {
+    res.status(500).json({
+      message: "Erreur serveur",
+      error: error.message
+    });
+  }
+};
+
+const getDoctors = async (req, res) => {
+  try {
+    const doctors = await User.find({ 
+      role: 'medecin',
+      isActive: true 
+    })
+    .populate('speciality', 'name')
+    .select('fullname speciality role');
+    
+    return res.status(200).json({ 
+      message: 'Médecins récupérés',
+      data: doctors 
+    });
+  } catch (error) {
+    console.error('Erreur getDoctors:', error);
+    return res.status(500).json({ 
+      message: 'Erreur serveur' 
+    });
+  }
+};
+
+module.exports = { getAllUsers,createUser,getMyProfile,toggleUserStatus,updateMyProfile ,updateUserRole,getDoctors};

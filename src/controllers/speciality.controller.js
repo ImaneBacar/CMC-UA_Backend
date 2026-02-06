@@ -11,10 +11,12 @@ try {
     if (existingSpeciality) {
         return res.status(400).json({message:"Cette spécialité existe déja"})
     }
+
+    
     const newSpeciality =await Speciality.create({
         name:name.toLowerCase(),
         description: description || "",
-        createdBy:req.body.createdBy
+        createdBy:req.user._id
     })
 
     res.status(201).json({

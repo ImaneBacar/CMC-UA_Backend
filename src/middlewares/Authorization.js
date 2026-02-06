@@ -9,7 +9,9 @@ const authorize = (roles = []) => {
             if (!token) return res.status(401).json({ message: "Accès refusé" });
 
             const decoded = jwt.verify(token, process.env.JWT_SECRET);
-            const user = await User.findById(decoded.userId);
+            
+            const userId = decoded.userId || decoded.id;
+            const user = await User.findById(userId);
 
             if (!user || !user.isActive) {
                 return res.status(401).json({ message: "Utilisateur non trouvé ou désactivé" });
@@ -23,6 +25,7 @@ const authorize = (roles = []) => {
             req.user = user;
             next();
         } catch (error) {
+            console.error('Erreur authorization:', error);  // ← Ajoute ce log
             res.status(401).json({ message: "Session expirée ou invalide" });
         }
     };

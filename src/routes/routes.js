@@ -4,7 +4,7 @@ const router = express.Router();
 // Controllers
 const { createSpeciality, getAllSpecialities, toggleSpecialityStatus,updateSpeciality } = require("../controllers/speciality.controller");
 
-const { getAllUsers,createUser,getMyProfile,toggleUserStatus,updateMyProfile} = require("../controllers/user.controller");
+const { getAllUsers,getDoctors,getMyProfile,toggleUserStatus,updateMyProfile,updateUserRole} = require("../controllers/user.controller");
 
 const { registerUser, loginUser, changePassword } = require("../controllers/Auth");
 
@@ -60,15 +60,16 @@ router.post('/change-password', authorize([]), changePassword);
 // UTILISATEURS
 // Récupère tous les utilisateurs
 router.get('/users',authorize(['admin']), getAllUsers);
-// Créer un utilisateur
-router.post('/users', authorize(['admin']), createUser);
 // Mon profil
-router.get('/users/profile', authorize([]), getMyProfile);
+router.get('/user/profile', authorize([]), getMyProfile);
 // Mettre à jour mon profil
 router.put('/users/profile', authorize([]), updateMyProfile);
 // Active ou désactive un utilisateur
 router.put('/users/:id/status', authorize(['admin']), toggleUserStatus);
-
+// Modifier rôle
+router.patch("/users/:id/role", authorize(['admin']), updateUserRole);
+//
+router.get('/doctors', authorize(['secretaire', 'medecin']), getDoctors); 
 
 // SPÉCIALITÉS
 // Récupère toutes les spécialités
@@ -85,7 +86,7 @@ router.put('/speciality/:id/status', authorize(['admin']), toggleSpecialityStatu
 // Crée un nouveau patient et son dossier médical
 router.post('/patient', authorize(['secretaire', 'medecin']), createPatient);
 // Récupère tous les patients
-router.get('/patients', authorize([]), getAllPatients);
+router.get('/patients', authorize(['secretaire','medecin']), getAllPatients);
 // Recherche des patients par nom ou autre critère
 router.get('/patients/search', authorize(['secretaire','medecin']), searchPatients);
 // Récupère un patient par son ID
