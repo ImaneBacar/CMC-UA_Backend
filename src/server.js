@@ -13,7 +13,8 @@ app.use(morgan(':method :url :status :res[content-length] - :response-time ms'))
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.use(cors({
-  origin: "https://cmc-ua-frontend-ma7infrov-imane-bacars-projects.vercel.app",
+  origin:[ "https://cmc-ua-frontend-ma7infrov-imane-bacars-projects.vercel.app",
+  "https://cmc-ua-frontend.vercel.app"],
   credentials: true
 })); 
 
