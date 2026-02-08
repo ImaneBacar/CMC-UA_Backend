@@ -1,4 +1,4 @@
-# 🏥 API Clinique Al-Kamar - Backend
+# 🏥 API Clinique CMC-UAr - Backend
 
 > Système de gestion complète pour clinique médicale avec gestion des patients, consultations, analyses, opérations et paiements.
 
@@ -903,7 +903,7 @@ pm2 startup
 ```nginx
 server {
     listen 80;
-    server_name api.clinique-alkamar.com;
+    server_name api.clinique-cmcua.com;
 
     location / {
         proxy_pass http://localhost:5000;
@@ -1020,7 +1020,7 @@ Ce projet est sous licence **MIT**. Voir le fichier [LICENSE](LICENSE) pour plus
 
 ## 🙏 Remerciements
 
-- Équipe médicale de la Clinique Al-Kamar
+- Équipe médicale de la Clinique CMC-UAr
 - Communauté Node.js et MongoDB
 - Tous les contributeurs open-source
 
@@ -1038,8 +1038,8 @@ Pour toute question ou problème :
 
 <div align="center">
 
-**Fait avec ❤️ pour la Clinique Al-Kamar**
+**Fait avec ❤️ pour la Clinique CMC-UAr**
 
-[⬆ Retour en haut](#-api-clinique-al-kamar---backend)
+[⬆ Retour en haut](#-api-clinique-CMC-UAr---backend)
 
 </div>

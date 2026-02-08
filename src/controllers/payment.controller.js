@@ -17,8 +17,11 @@ const getAllPayments = async (req, res) => {
       .populate('visit', 'visitNumber visitDate')
       .populate('validatedBy', 'fullname');
 
-    res.status(200).json({ payments });
-  } catch (error) {
+    res.status(200).json({ 
+        message: 'Liste des paiements',
+        data: payments 
+      }); 
+   } catch (error) {
     console.error('Erreur récupération paiements:', error);
     res.status(500).json({ message: 'Erreur serveur', error: error.message });
   }
